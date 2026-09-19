@@ -1,0 +1,12 @@
+-- Tabla calculada: DimFecha
+DimFecha =
+ADDCOLUMNS (
+    CALENDAR ( DATE(2025,1,1), DATE(2025,12,31) ),
+    "Año", YEAR([Date]),
+    "NumeroMes", MONTH([Date]),
+    "Mes", FORMAT([Date],"MMMM"),
+    "AñoMes", FORMAT([Date],"YYYY-MM"),
+    "Trimestre", "T" & FORMAT([Date],"Q"),
+    "DiaSemana", FORMAT([Date],"dddd"),
+    "EsFinDeSemana", WEEKDAY([Date],2) > 5
+)

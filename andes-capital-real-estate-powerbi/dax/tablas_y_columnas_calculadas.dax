@@ -1,0 +1,33 @@
+-- Tabla calculada: dim_fecha
+dim_fecha =
+ADDCOLUMNS (
+    CALENDAR ( MIN ( hecho_ventas_propiedades[fecha_venta] ), MAX ( hecho_ventas_propiedades[fecha_venta] ) ),
+    "Año", YEAR ( [Date] ),
+    "Mes", FORMAT ( [Date], "MMMM" ),
+    "Mes Numero", MONTH ( [Date] ),
+    "Año-Mes", FORMAT ( [Date], "YYYY-MM" ),
+    "Trimestre", "T" & FORMAT ( [Date], "Q" )
+)
+
+-- Columna calculada: hecho_ventas_propiedades[Primera Compra Cliente]
+Primera Compra Cliente =
+CALCULATE (
+    MIN ( hecho_ventas_propiedades[fecha_venta] ),
+    ALLEXCEPT ( hecho_ventas_propiedades, hecho_ventas_propiedades[id_cliente] )
+)
+
+-- Columna calculada: hecho_ventas_propiedades[Mes Cohorte]
+Mes Cohorte =
+FORMAT ( hecho_ventas_propiedades[Primera Compra Cliente], "YYYY-MM" )
+
+-- Columna calculada: hecho_ventas_propiedades[Mes Venta]
+Mes Venta =
+FORMAT ( hecho_ventas_propiedades[fecha_venta], "YYYY-MM" )
+
+-- Columna calculada: hecho_ventas_propiedades[Numero Mes Cohorte]
+Numero Mes Cohorte =
+DATEDIFF (
+    hecho_ventas_propiedades[Primera Compra Cliente],
+    hecho_ventas_propiedades[fecha_venta],
+    MONTH
+)
